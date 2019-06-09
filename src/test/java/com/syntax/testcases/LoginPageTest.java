@@ -13,7 +13,7 @@ import com.syntax.utils.ConfigsReader;
 
 public class LoginPageTest extends BaseClass{
 
-	@Test
+	@Test(enabled=false)
 	public void loginToOrangeHRM() {
 		LoginPageWithoutPageFactory login=new LoginPageWithoutPageFactory();
 		
@@ -23,7 +23,7 @@ public class LoginPageTest extends BaseClass{
 		
 	}
 	
-	@Test
+	@Test(enabled=false)
 	public void doLogin() {
 		LoginPage login=new LoginPage();
 		CommonMethods.sendText(login.userName, ConfigsReader.getProperty("username"));
@@ -44,10 +44,6 @@ public class LoginPageTest extends BaseClass{
 		String error = login.errorText.getText();
 		
 		Assert.assertEquals(error, "Invalid Credentials");
-		
-		
-//		CommonMethods.sendText(login.userName, "Admin"); other option 
-//		CommonMethods.sendText(login.password, "password");
-//		CommonMethods.click(login.loginBtn);
+
 	}
 }

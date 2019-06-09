@@ -29,6 +29,11 @@ Step 6: Verify employee is added
     @FindBy(id="employeeId")
     public WebElement employeeId;
     
+    @FindBy(xpath="//div[@id='location_inputfileddiv']//input")
+    public WebElement location;
+    
+    @FindBy(xpath="//div[@id='location_inputfileddiv']//ul")
+    public WebElement locationList;
     
     
     public AddEmployeePage() {
