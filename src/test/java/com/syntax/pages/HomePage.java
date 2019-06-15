@@ -15,7 +15,7 @@ public WebElement dashboardText;
 public WebElement pim;
 
 @FindBy(xpath="//span[text()='Add Employee']")
-public WebElement addBtn;
+public WebElement addEmployee;
 
 public HomePage() {
 	PageFactory.initElements(driver, this);

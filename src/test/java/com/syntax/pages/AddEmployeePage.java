@@ -35,11 +35,18 @@ Step 6: Verify employee is added
     @FindBy(xpath="//div[@id='location_inputfileddiv']//ul")
     public WebElement locationList;
     
+    @FindBy(xpath="//input[@id='chkLogin']")
+    public WebElement createLoginDetails;
+    
+    @FindBy(id="systemUserSaveBtn")
+    public WebElement saveBtn;
+    
+    @FindBy(xpath="//span[@id='pim.navbar.employeeName']")
+    public WebElement empCheck;
     
     public AddEmployeePage() {
         PageFactory.initElements(driver,this);
     }
-	
 	
 
 }

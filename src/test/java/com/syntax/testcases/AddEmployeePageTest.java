@@ -1,9 +1,11 @@
 package com.syntax.testcases;
 
-import java.util.List;
-
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebElement;
+import org.testng.annotations.Test;
+import org.testng.AssertJUnit;
+import org.testng.annotations.Test;
+import org.testng.AssertJUnit;
+import org.testng.Assert;
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import com.syntax.pages.AddEmployeePage;
@@ -12,44 +14,80 @@ import com.syntax.pages.LoginPage;
 import com.syntax.utils.BaseClass;
 import com.syntax.utils.CommonMethods;
 import com.syntax.utils.ConfigsReader;
+import com.syntax.utils.Constants;
+import com.syntax.utils.ExcelUtility;
 
 public class AddEmployeePageTest extends BaseClass {
 
-	@Test
-	public void addEmployee() throws InterruptedException {
+	@Test(dataProvider="Employee Data", groups="regression")
+	
+	public void addEmployee(String fName, String mName,String lName, String location) throws InterruptedException {
+
 		LoginPage login = new LoginPage();
-		HomePage home = new HomePage();
-		AddEmployeePage addEmp = new AddEmployeePage();
-		
+		HomePage home =new HomePage();
+		AddEmployeePage addEmp=new AddEmployeePage();
+		//login to the OrangeHRM
 		login.login(ConfigsReader.getProperty("username"), ConfigsReader.getProperty("password"));
-		
-		
+		//navigate to add Employee
 		CommonMethods.click(home.pim);
-		CommonMethods.click(home.addBtn);
-		
-		CommonMethods.sendText(addEmp.firstName, "John");
-		CommonMethods.sendText(addEmp.lastName, "Doe");
-		
-        CommonMethods.click(addEmp.location);
-		
-		//1 identify list
-		//2 get all children with li tags
-		//loop through each li tag and get text
-		//if text is matching then we click
-		//break
-		
-		List<WebElement> listLocations = addEmp.locationList.findElements(By.tagName("li"));
-		
-		for (WebElement li : listLocations) {
-			String liText=li.getText().trim();
-			
-			if (liText.equals("HQ")) {
-				li.click();
-				break;
-			}
-		}
-		Thread.sleep(9000);
-		
-		
+		CommonMethods.click(home.addEmployee);
+		//enter employee details
+		CommonMethods.sendText(addEmp.firstName, fName);
+		CommonMethods.sendText(addEmp.middleName, mName);
+		CommonMethods.sendText(addEmp.lastName, lName);
+		CommonMethods.click(addEmp.location);
+		CommonMethods.selectList(addEmp.locationList, location);
+		CommonMethods.click(addEmp.saveBtn);
+		//verify employee is added
+		CommonMethods.waitForElementBeClickable(addEmp.empCheck, 20);
+		String verifText=addEmp.empCheck.getText();
+		System.out.println(verifText);
+		AssertJUnit.assertEquals(verifText, fName+" "+lName);
 	}
+	
+	@DataProvider(name = "Employee Data")  //this data provider is dynamic 
+	public Object[][] getEmpData() {
+		
+		ExcelUtility obj = new ExcelUtility();
+		obj.openExcel(Constants.XL_FILEPATH, "EmployeeDetails");
+		
+		int rows= obj.getRowNum(); //13
+		int cols = obj.getColNum(0); //4 
+		
+		Object[][] data = new Object [rows-1][cols];  //size of rows: rows-1 it is like NEW Object[12][4]
+		
+		for (int i=1; i<rows; i++) { //we want to skip header row, so we start from row with index 1
+			for (int j=0; j<cols; j++) {
+				
+				String value = obj.getCellData(i, j);
+				//at first iteration - data[1][0] 
+				//at last iteration - data[12][3]
+				data[i-1][j]=value; //i in the beginning == 1, but we want to store as 0, so we do i-1
+			}}	
+		return data;
+	}
+	
+	@DataProvider(name = "employee details")
+	public Object[][] getData() {
+		
+		Object[][] data=new Object[3][4];
+		//1 set
+		data[0][0]="John";
+		data[0][1]="Snow";
+		data[0][2]="White";
+		data[0][3]="HQ";
+		//2 set
+		data[1][0]="Jane";
+		data[1][1]="Rain";
+		data[1][2]="Yellow";
+		data[1][3]="West Office";
+		//3 set
+		data[2][0]="Arya";
+		data[2][1]="Sunny";
+		data[2][2]="Blue";
+		data[2][3]="North Office";
+		return data;
+	}
+	
+	
 }

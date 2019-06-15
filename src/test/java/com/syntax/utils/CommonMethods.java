@@ -210,5 +210,18 @@ public class CommonMethods extends BaseClass {
     	public static void click(WebElement element) {
     		element.click();
     	}
+    	
+    	public static void selectList(WebElement element, String text) {
+
+    		List<WebElement> listLocations = element.findElements(By.tagName("li"));
+    		for (WebElement li : listLocations) {
+    			String liText = li.getAttribute("innerHTML");
+
+    			if (liText.contains(text)) {
+    				li.click();
+    				break;
+    			}
+    		}
+    	}
         
     }

@@ -1,5 +1,9 @@
 package com.syntax.testcases;
 
+import org.testng.annotations.Test;
+import org.testng.AssertJUnit;
+import org.testng.annotations.Test;
+import org.testng.AssertJUnit;
 import org.openqa.selenium.interactions.SendKeysAction;
 import org.testng.Assert;
 import org.testng.annotations.Test;
@@ -13,7 +17,7 @@ import com.syntax.utils.ConfigsReader;
 
 public class LoginPageTest extends BaseClass{
 
-	@Test(enabled=false)
+	@Test(groups = "smoke")
 	public void loginToOrangeHRM() {
 		LoginPageWithoutPageFactory login=new LoginPageWithoutPageFactory();
 		
@@ -32,10 +36,10 @@ public class LoginPageTest extends BaseClass{
 		
 		HomePage home = new HomePage();
 		boolean isDisplayed= home.dashboardText.isDisplayed();
-		Assert.assertTrue(isDisplayed);
+		AssertJUnit.assertTrue(isDisplayed);
 	}
 	
-	@Test
+	@Test(groups="regression")
 	public void negativeLogin() {
 		LoginPage login = new LoginPage();
 		
@@ -43,7 +47,7 @@ public class LoginPageTest extends BaseClass{
 		
 		String error = login.errorText.getText();
 		
-		Assert.assertEquals(error, "Invalid Credentials");
+		AssertJUnit.assertEquals(error, "Invalid Credentials");
 
 	}
 }
